@@ -1,0 +1,22 @@
+
+body {
+	background: url("../images/neo4j_background3.gif") repeat fixed 0 0 rgba(0, 0, 0, 0);
+	font-family: 'Open Sans',Arial !important;
+}
+
+#graph {
+    position: absolute;
+    top: 0;
+    margin: auto;
+    height: 100%;
+    width: 100%;
+}
+
+.row {
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+.navbar-form {
+	padding: 0px;
+}

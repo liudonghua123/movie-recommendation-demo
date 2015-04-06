@@ -3,7 +3,6 @@ package com.liudonghua.apps.movie_recommendation_demo.domain;
 import org.springframework.data.neo4j.annotation.EndNode;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
-import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.RelationshipEntity;
 import org.springframework.data.neo4j.annotation.StartNode;
 import org.springframework.data.rest.core.annotation.RestResource;
@@ -78,8 +77,6 @@ public class GenreRel {
 		long temp;
 		temp = Double.doubleToLongBits(probability);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result
-				+ ((relationId == null) ? 0 : relationId.hashCode());
 		return result;
 	}
 
@@ -105,17 +102,7 @@ public class GenreRel {
 		if (Double.doubleToLongBits(probability) != Double
 				.doubleToLongBits(other.probability))
 			return false;
-		if (relationId == null) {
-			if (other.relationId != null)
-				return false;
-		} else if (!relationId.equals(other.relationId))
-			return false;
 		return true;
 	}
-
-
-
-	
-	
 
 }

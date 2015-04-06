@@ -2,71 +2,294 @@
 <html lang="zh">
 <head>
 	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <title>电影推荐</title>
-    <link rel="stylesheet"  href="libs/bootstrap/dist/css/bootstrap.min.css ">
+    <link rel="stylesheet"  href="libs/alchemyjs/dist/styles/vendor.css">
+    <link rel="stylesheet"  href="libs/alchemyjs/dist/alchemy.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-<div id="graph">
-</div>
-<div role="navigation" class="navbar navbar-default navbar-static-top">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6 col-md-6">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <form role="search" class="navbar-form" id="search">
-                            <div class="form-group">
-                                <input type="text" value="Toy" placeholder="Search for Movie Title" class="form-control" name="search">
-                            </div>
-                            <button class="btn btn-default" type="submit">Search</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">电影推荐系统</a>
         </div>
-		<div class="row">
-		    <div class="col-sm-4 col-md-4">
-		        <div class="panel panel-default">
-		            <div class="panel-heading">搜索结果</div>
-		            <table id="results" class="table table-striped table-hover">
-		                <thead>
-		                <tr>
-		                    <th>Movie</th>
-		                </tr>
-		                </thead>
-		                <tbody>
-		                </tbody>
-		            </table>
-		        </div>
-		    </div>
-		    <div class="col-sm-8 col-md-8">
-		        <div class="panel panel-default">
-		            <div class="panel-heading" id="title">Details</div>
-		            <table id="details" class="table table-striped table-hover">
-		                <thead>
-		                </thead>
-		                <tbody>
-		                <tr><td>Release Date</td><td id="release_date"></td></tr>
-		                <tr><td>IMDB URL</td><td id="imdb_url"></td></tr>
-		                </tbody>
-		            </table>
-		        </div>
-		    </div>
-		</div>
-    </div>
-</div>
-<style type="text/css">
-    .node { stroke: #222; stroke-width: 1.5px; }
-    .node.actor { fill: #888; }
-    .node.movie { fill: #BBB; }
-    .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
-</style>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">主页</a></li>
+            <li><a href="#about">关于</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">显示图结构 <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li class="dropdown-header">图结构</li>
+                <li><a href="#" id="showGraph">显示总体图结构</a></li>
+                <li><a href="#" id="showUserGraphInput">显示用户相关图结构</a></li>
+                <li><a href="#" id="showMovieGraphInput">显示电影相关图结构</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">推荐</li>
+                <li><a href="#" id="showRecommendationInput">获取用户推荐列表</a></li>
+              </ul>
+            </li>
+          </ul>
+          	<form class="navbar-form navbar-right"  role="search" id="search2">
+                <div class="form-group">
+                    <input type="text" value="Toy" placeholder="Search for Movie Title" class="form-control" name="search">
+                </div>
+                <button class="btn btn-default" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
 
-<script type="text/javascript" src="libs/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="libs/d3/d3.min.js"></script>
+    <div class="jumbotron">
+      <div class="container">
+        <h1>电影推荐系统</h1>
+        <p>这是一个简易的电影推荐系统，可以展示用户、电影、分类等联系</p>
+      </div>
+    </div>
+
+    <div class="container"  style="height: 480px;">
+		<div class="alchemy" id="alchemy"></div>
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="userGraphInputModal" tabindex="-1" role="dialog" aria-labelledby="userGraphInputModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="userGraphInputModalLabel">输入用户ID</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="userId" class="control-label">User ID:</label>
+            <select class="form-control userId"></select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="showUserGraph">Show User Graph</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="movieGraphInputModal" tabindex="-1" role="dialog" aria-labelledby="movieGraphInputModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="movieGraphInputModalLabel">输入电影ID</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="movieId" class="control-label">Movie ID:</label>
+            <select class="form-control movieId"></select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="showMovieGraph">Show Movie Graph</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="movieRecommendationsInputModal" tabindex="-1" role="dialog" aria-labelledby="movieRecommendationsInputModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="movieRecommendationsInputModalLabel">输入待推荐用户ID</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="userId" class="control-label">User ID:</label>
+            <select class="form-control userId"></select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="showRecommendation">Show Recommendation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="pleaseWaitDialog" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="pleaseWaitDialogLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1>正在处理...</h1>
+      </div>
+      <div class="modal-body">
+            <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="libs/alchemyjs/dist/scripts/vendor.js"></script>
+<script type="text/javascript" src="libs/alchemyjs/dist/alchemy.js"></script>
+
+<script type="text/javascript">
+
+// http://www.sitepoint.com/javascript-generate-lighter-darker-color/
+function colorLuminance(hex, lum) {
+	// validate hex string
+	hex = String(hex).replace(/[^0-9a-f]/gi, '');
+	if (hex.length < 6) {
+		hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+	}
+	lum = lum || 0;
+	// convert to decimal and change luminosity
+	var rgb = "#", c, i;
+	for (i = 0; i < 3; i++) {
+		c = parseInt(hex.substr(i*2,2), 16);
+		c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+		rgb += ("00"+c).substr(c.length);
+	}
+	return rgb;
+}
+
+var sort_by = function(field, reverse, primer){
+
+	   var key = primer ? 
+	       function(x) {return primer(x[field])} : 
+	       function(x) {return x[field]};
+
+	   reverse = !reverse ? 1 : -1;
+
+	   return function (a, b) {
+	       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+	     } 
+	}
+
+var progressDialog;
+progressDialog = progressDialog || (function () {
+    var pleaseWaitDiv = $('#pleaseWaitDialog');
+    return {
+        show: function() {
+            pleaseWaitDiv.modal();
+        },
+        hide: function () {
+            pleaseWaitDiv.modal('hide');
+        },
+
+    };
+})();
+
+      var config = {
+        dataSource: "graph", 
+        //cluster: true, 
+        //clusterColours: ["#DD79FF", "#00FF30", "#5168FF", "#f83f00", "#ff8d8f"],
+        forceLocked: false,
+        nodeCaption: "caption", 
+        edgeCaption: "caption",
+        linkDistance: function(){ return 40; },
+        //graphHeight: function(){ return 480; },
+        //graphWidth: function(){ return 960; },
+        backgroundColour: "#FFFFFF",
+        nodeCaptionsOnByDefault: true,
+        edgeCaptionsOnByDefault: true,
+        edgeCaption: function (edge) {
+        	return Math.round(parseFloat(edge.caption)*100)/100;
+        },
+        afterLoad: function() {
+        	progressDialog.hide();
+        },
+        
+        nodeTypes: {"type":["Genre", "User", "Movie"]},
+        edgeTypes: {"type":["HAS_GENRE", "SIMILARITY", "RATED"]}, 
+        directedEdges:true,
+        nodeStyle: {
+        	"all": {
+                borderWidth: 5,
+                radius: 25,
+                captionColor: "#000"
+        	},
+            "Genre": {
+                color: "#68BDF6",
+                borderColor: "#5CA8DB",
+                radius: 15
+            },
+            "User": {
+                color: "#6DCE9E",
+                borderColor: "#60B58B",
+                radius: 25
+            },
+            "Movie": {
+                color: "#FF756E",
+                borderColor: "#E06760",
+                radius: 35
+            },
+            "RecommendedMovie": {
+                color: function(d) { 
+                	return colorLuminance("#9400D3", d.getProperties().recommendation_value);
+                },
+                borderColor: "#E06760",
+                radius: 35
+            },
+            
+        }, 
+        "edgeStyle": {
+            "all": {
+                "width": 5,
+                "color": "#000",
+                "opacity": 0.5,
+                "directed": true,
+                "curved": true,
+                "selected": {
+                  "opacity": 1
+                },
+                "highlighted": {
+                  "opacity": 1
+                },
+                "hidden": {
+                  "opacity": 0
+                }
+              },
+              "HAS_GENRE": {
+            	  color: "#DE9BF9"
+              }, 
+              "SIMILARITY": {
+            	  color: "#FFD86E"
+              }, 
+              "RATED": {
+            	  color: "#FB95AF"
+              }
+          }
+       }
+
+        alchemy = new Alchemy(config)
+</script>
+
 <script type="text/javascript">
     $(function () {
     	function formatDate(s) {
@@ -100,53 +323,91 @@
                     }, "json");
             return false;
         }
+        
+        var userNames, movieTitles;
+        function setup() {
+            $.get("userNames", function (data) {
+                  userNames = data.sort(sort_by('id', false, parseInt));
+                  var $userIdSelect = $('select.userId');
+                  $userIdSelect.empty().append(function() {
+                        var output = '';
+                        $.each(userNames, function(key, entry) {
+                              output += '<option value=' + entry.id + '>' + entry.caption + '</option>';
+           	            });
+           	      return output;
+           	      });
+           	}, "json");
+            $.get("movieTitles", function (data) {
+                  movieTitles = data.sort(sort_by('id', false, parseInt));
+                  var $movieIdSelect = $('select.movieId');
+                  $movieIdSelect.empty().append(function() {
+                        var output = '';
+                        $.each(movieTitles, function(key, entry) {
+                              output += '<option value=' + entry.id + '>' + entry.caption + '</option>';
+           	            });
+           	      return output;
+           	      });
+            }, "json");
+        }
+        setup();
 
         $("#search").submit(search);
-        search();
-    })
-</script>
-
-<script type="text/javascript">
-    var width = 800, height = 800;
-
-    var force = d3.layout.force()
-            .charge(-200).linkDistance(30).size([width, height]);
-
-    var svg = d3.select("#graph").append("svg")
-            .attr("width", "100%").attr("height", "100%")
-            .attr("pointer-events", "all");
-
-    d3.json("/graph", function(error, graph) {
-        if (error) return;
-
-        force.nodes(graph.nodes).links(graph.links).start();
-
-        var link = svg.selectAll(".link")
-                .data(graph.links).enter()
-                .append("line").attr("class", "link");
-
-        var node = svg.selectAll(".node")
-                .data(graph.nodes).enter()
-                .append("circle")
-                .attr("class", function (d) { return "node "+d.label })
-                .attr("r", 10)
-                .call(force.drag);
-
-        // html title attribute
-        node.append("title")
-                .text(function (d) { return d.title; })
-
-        // force feed algo ticks
-        force.on("tick", function() {
-            link.attr("x1", function(d) { return d.source.x; })
-                    .attr("y1", function(d) { return d.source.y; })
-                    .attr("x2", function(d) { return d.target.x; })
-                    .attr("y2", function(d) { return d.target.y; });
-
-            node.attr("cx", function(d) { return d.x; })
-                    .attr("cy", function(d) { return d.y; });
+        //search();
+        
+        $('#userGraphInputModal').modal({
+        	keyboard: false,
+        	show: false
+		});
+        
+        $('#movieGraphInputModal').modal({
+        	keyboard: false,
+        	show: false
+		});
+        
+        $("#showUserGraphInput").click(function() {
+        	$('#userGraphInputModal').modal('show');
         });
-    });
+        
+        $("#showMovieGraphInput").click(function() {
+        	$('#movieGraphInputModal').modal('show');
+        });
+        
+        $("#showRecommendationInput").click(function() {
+        	$("#movieRecommendationsInputModal").modal('show');
+        });
+        
+        $("#showGraph").click(function() {
+        	progressDialog.show();
+        	config.dataSource = "graph";
+        	alchemy = new Alchemy(config);
+        });
+        
+        $("#showUserGraph").click(function() {
+        	$('#userGraphInputModal').modal('hide');
+        	var userId = $("#userGraphInputModal .userId").val();
+        	progressDialog.show();
+        	config.dataSource = "userGraph?userId=" + userId;
+        	alchemy = new Alchemy(config);
+        });
+        
+        $("#showMovieGraph").click(function() {
+        	$('#movieGraphInputModal').modal('hide');
+        	var movieId = $("#movieGraphInputModal .movieId").val();
+        	progressDialog.show();
+        	config.dataSource = "movieGraph?movieId=" + movieId;
+        	alchemy = new Alchemy(config);
+        });
+        
+        $("#showRecommendation").click(function() {
+        	$('#movieRecommendationsInputModal').modal('hide');
+        	var userId = $("#movieRecommendationsInputModal .userId").val();
+        	progressDialog.show();
+        	config.dataSource = "recommendationGraph?userId=" + userId;
+        	alchemy = new Alchemy(config);
+        })
+        
+        
+    })
 </script>
 </body>
 </html>

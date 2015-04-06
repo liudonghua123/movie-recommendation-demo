@@ -1,22 +1,68 @@
-
 body {
-	background: url("../images/neo4j_background3.gif") repeat fixed 0 0 rgba(0, 0, 0, 0);
-	font-family: 'Open Sans',Arial !important;
+	background: url("../images/neo4j_background3.gif") repeat fixed 0 0
+		rgba(0, 0, 0, 0);
+	font-family: 'Microsoft YaHei' , Avenir, 'Lucida Grande', Calibri, 'Trebuchet MS', Helvetica, Arial, 'Hiragino Sans GB', 'WenQuanYi Micro Hei', STHeiti, 'Microsoft Jhenghei', 'Nanum Gothic', sans-serif;
 }
 
-#graph {
-    position: absolute;
-    top: 0;
-    margin: auto;
-    height: 100%;
-    width: 100%;
+.node circle {
+	fill: #c0c0c0;
+	fill-opacity: .5;
+	stroke-opacity: 1;
+	stroke: #ffffff;
+  	stroke-width: 2px;
 }
 
-.row {
-	margin-right: 0px;
-	margin-left: 0px;
+.node.selected circle {
+	stroke-width: 5;
 }
 
-.navbar-form {
-	padding: 0px;
+.node.Genre circle {
+  fill: rgb(104, 189, 246);
+  stroke: rgb(92, 168, 219);
+}
+
+.node.User circle {
+  fill: rgb(109, 206, 158);
+  stroke: rgb(96, 181, 139);
+}
+
+.node.Movie circle {
+  fill: rgb(255, 117, 110);
+  stroke: rgb(224, 103, 96);
+}
+
+.node text {
+  fill: black;
+  font-weight: bold;
+  text-anchor: middle;
+  text-shadow: none;
+}
+
+.edge {
+	stroke-linecap: round;
+	stroke: #ff0000;
+	stroke-width: 3;
+}
+
+.edge.selected {
+	stroke: #ff80ff;
+	stroke-width: 5;
+}
+
+.edge.HAS_GENRE {
+	stroke: #8000ff;
+}
+
+.edge.SIMILARITY {
+	stroke: #00ff00;
+}
+
+.edge.SIMILARITY {
+	stroke: #0080ff;
+}
+
+.edge text, .edge.active text {
+  fill: black;
+  font-weight: bold;
+  text-shadow: none;
 }

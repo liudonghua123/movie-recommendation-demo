@@ -1,6 +1,5 @@
 package com.liudonghua.apps.movie_recommendation_demo.domain;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,31 +11,30 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.annotation.RelatedToVia;
-import org.springframework.data.rest.core.annotation.RestResource;
 
 @NodeEntity
 public class Movie {
 
 	@GraphId
 	Long nodeId;
-	
-	@Indexed(unique=true)
+
+	@Indexed(unique = true)
 	private long id;
-	
+
 	@Indexed
 	private String title;
 	private Date releaseDate;
 	private String imdbUrl;
-	
-	@RelatedTo(type="HAS_GENRE")
+
+	@RelatedTo(type = "HAS_GENRE")
 	@Fetch
 	Set<Genre> genres = new HashSet<>();
-	
-	@RelatedToVia(type="HAS_GENRE")
+
+	@RelatedToVia(type = "HAS_GENRE")
 	@Fetch
 	Set<GenreRel> genreRels = new HashSet<>();
-	
-	@RelatedToVia(type="RATED" ,direction=Direction.INCOMING)
+
+	@RelatedToVia(type = "RATED", direction = Direction.INCOMING)
 	@Fetch
 	Set<Rating> ratings = new HashSet<>();
 
@@ -49,13 +47,12 @@ public class Movie {
 		this.releaseDate = releaseDate;
 		this.imdbUrl = imdbUrl;
 	}
-	
+
 	public GenreRel hasGenre(Genre genre, double probability) {
 		GenreRel genreRel = new GenreRel(probability, this, genre);
 		genreRels.add(genreRel);
 		return genreRel;
 	}
-
 
 	public Long getNodeId() {
 		return nodeId;
@@ -127,7 +124,6 @@ public class Movie {
 		int result = 1;
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((imdbUrl == null) ? 0 : imdbUrl.hashCode());
-		result = prime * result + ((nodeId == null) ? 0 : nodeId.hashCode());
 		result = prime * result
 				+ ((releaseDate == null) ? 0 : releaseDate.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
@@ -150,11 +146,6 @@ public class Movie {
 				return false;
 		} else if (!imdbUrl.equals(other.imdbUrl))
 			return false;
-		if (nodeId == null) {
-			if (other.nodeId != null)
-				return false;
-		} else if (!nodeId.equals(other.nodeId))
-			return false;
 		if (releaseDate == null) {
 			if (other.releaseDate != null)
 				return false;
@@ -168,7 +159,4 @@ public class Movie {
 		return true;
 	}
 
-
-
-	
 }

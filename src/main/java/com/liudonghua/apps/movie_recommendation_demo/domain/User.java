@@ -1,6 +1,5 @@
 package com.liudonghua.apps.movie_recommendation_demo.domain;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,33 +10,31 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.annotation.RelatedToVia;
-import org.springframework.data.rest.core.annotation.RestResource;
 
 @NodeEntity
 public class User {
 
 	@GraphId
 	Long nodeId;
-	
-	@Indexed(unique=true)
+
+	@Indexed(unique = true)
 	private long id;
 	private int age;
 	private String gender;
 	private String occupation;
 	private String zipCode;
-	
-	@RelatedTo(type="RATED")
+
+	@RelatedTo(type = "RATED")
 	@Fetch
 	private Set<Movie> movies = new HashSet<>();
-	
-	@RelatedToVia(type="RATED")
+
+	@RelatedToVia(type = "RATED")
 	@Fetch
 	private Set<Rating> ratings = new HashSet<>();
-	
-	@RelatedToVia(type="SIMILARITY", direction=Direction.BOTH)
+
+	@RelatedToVia(type = "SIMILARITY", direction = Direction.BOTH)
 	@Fetch
 	private Set<Similarity> similarities = new HashSet<>();
-	
 
 	public User() {
 	}
@@ -50,19 +47,18 @@ public class User {
 		this.occupation = occupation;
 		this.zipCode = zipCode;
 	}
-	
+
 	public Rating rate(Movie movie, int rate) {
 		Rating rating = new Rating(this, movie, rate);
 		ratings.add(rating);
 		return rating;
 	}
-	
+
 	public Similarity similarTo(User user2, double similarityValue) {
 		Similarity similarity = new Similarity(similarityValue, this, user2);
 		similarities.add(similarity);
 		return similarity;
 	}
-
 
 	public Long getNodeId() {
 		return nodeId;
@@ -143,7 +139,6 @@ public class User {
 		result = prime * result + age;
 		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((nodeId == null) ? 0 : nodeId.hashCode());
 		result = prime * result
 				+ ((occupation == null) ? 0 : occupation.hashCode());
 		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
@@ -168,11 +163,6 @@ public class User {
 			return false;
 		if (id != other.id)
 			return false;
-		if (nodeId == null) {
-			if (other.nodeId != null)
-				return false;
-		} else if (!nodeId.equals(other.nodeId))
-			return false;
 		if (occupation == null) {
 			if (other.occupation != null)
 				return false;
@@ -186,6 +176,4 @@ public class User {
 		return true;
 	}
 
-
-	
 }

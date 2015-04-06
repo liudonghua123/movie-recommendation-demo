@@ -3,7 +3,6 @@ package com.liudonghua.apps.movie_recommendation_demo.domain;
 import org.springframework.data.neo4j.annotation.EndNode;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
-import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.RelationshipEntity;
 import org.springframework.data.neo4j.annotation.StartNode;
 import org.springframework.data.rest.core.annotation.RestResource;
@@ -19,10 +18,10 @@ public class Rating {
 	@StartNode
 	@Fetch
 	private User user;
-	
+
 	@EndNode
 	@Fetch
-	@RestResource(rel="rating_movie")
+	@RestResource(rel = "rating_movie")
 	private Movie movie;
 
 	public Rating() {
@@ -33,7 +32,6 @@ public class Rating {
 		this.movie = movie;
 		this.rate = rate;
 	}
-
 
 	public Long getRelationId() {
 		return relationId;
@@ -73,8 +71,6 @@ public class Rating {
 		int result = 1;
 		result = prime * result + ((movie == null) ? 0 : movie.hashCode());
 		result = prime * result + rate;
-		result = prime * result
-				+ ((relationId == null) ? 0 : relationId.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
@@ -95,11 +91,6 @@ public class Rating {
 			return false;
 		if (rate != other.rate)
 			return false;
-		if (relationId == null) {
-			if (other.relationId != null)
-				return false;
-		} else if (!relationId.equals(other.relationId))
-			return false;
 		if (user == null) {
 			if (other.user != null)
 				return false;
@@ -107,8 +98,5 @@ public class Rating {
 			return false;
 		return true;
 	}
-
-	
-	
 
 }

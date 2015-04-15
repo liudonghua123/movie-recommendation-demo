@@ -51,8 +51,8 @@ public class Genre {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((nodeId == null) ? 0 : nodeId.hashCode());
 		return result;
 	}
 
@@ -65,15 +65,12 @@ public class Genre {
 		if (getClass() != obj.getClass())
 			return false;
 		Genre other = (Genre) obj;
+		if (id != other.id)
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (nodeId == null) {
-			if (other.nodeId != null)
-				return false;
-		} else if (!nodeId.equals(other.nodeId))
 			return false;
 		return true;
 	}

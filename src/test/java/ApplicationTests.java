@@ -1,29 +1,20 @@
-import java.util.List;
-import java.util.Map;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.neo4j.core.GraphDatabase;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
-import org.springframework.data.neo4j.support.node.Neo4jHelper;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.liudonghua.apps.movie_recommendation_demo.MyNeo4jConfiguration;
+import com.liudonghua.apps.movie_recommendation_demo.ApplicationConfiguration;
 import com.liudonghua.apps.movie_recommendation_demo.repository.GenreRepository;
 import com.liudonghua.apps.movie_recommendation_demo.repository.MovieRepository;
 import com.liudonghua.apps.movie_recommendation_demo.repository.UserRepository;
-import com.liudonghua.apps.movie_recommendation_demo.repository.MovieRepository.EdgeInfo;
-import com.liudonghua.apps.movie_recommendation_demo.repository.MovieRepository.NodeInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = MyNeo4jConfiguration.class)
+@SpringApplicationConfiguration(classes = ApplicationConfiguration.class)
 @Transactional
 public class ApplicationTests {
 	
@@ -80,12 +71,12 @@ public class ApplicationTests {
 //		Assert.assertEquals(5, users.size());
 //	}
 	
-	@Test
-	public void testRecommendationGraph() {
-		List<Integer> userRatedMovieIds = movieRepository.findUserRatedMovieIds(1);
-		List<NodeInfo> recommendationRelevantNodes = movieRepository.findRecommendationRelevantNodes(1, userRatedMovieIds);
-		Assert.assertEquals(3, userRatedMovieIds.size());
-		Assert.assertEquals(7, recommendationRelevantNodes.size());
-	}
+//	@Test
+//	public void testRecommendationGraph() {
+//		List<Integer> userRatedMovieIds = movieRepository.findUserRatedMovieIds(1);
+//		List<NodeInfo> recommendationRelevantNodes = movieRepository.findRecommendationRelevantNodes(1, userRatedMovieIds);
+//		Assert.assertEquals(3, userRatedMovieIds.size());
+//		Assert.assertEquals(7, recommendationRelevantNodes.size());
+//	}
 
 }

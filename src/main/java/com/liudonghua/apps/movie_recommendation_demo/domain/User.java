@@ -24,10 +24,6 @@ public class User {
 	private String occupation;
 	private String zipCode;
 
-	@RelatedTo(type = "RATED")
-	@Fetch
-	private Set<Movie> movies = new HashSet<>();
-
 	@RelatedToVia(type = "RATED")
 	@Fetch
 	private Set<Rating> ratings = new HashSet<>();
@@ -108,14 +104,6 @@ public class User {
 		this.zipCode = zipCode;
 	}
 
-	public Set<Movie> getMovies() {
-		return movies;
-	}
-
-	public void setMovies(Set<Movie> movies) {
-		this.movies = movies;
-	}
-
 	public Set<Rating> getRatings() {
 		return ratings;
 	}
@@ -136,12 +124,7 @@ public class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + age;
-		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result
-				+ ((occupation == null) ? 0 : occupation.hashCode());
-		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
 		return result;
 	}
 
@@ -154,24 +137,7 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (age != other.age)
-			return false;
-		if (gender == null) {
-			if (other.gender != null)
-				return false;
-		} else if (!gender.equals(other.gender))
-			return false;
 		if (id != other.id)
-			return false;
-		if (occupation == null) {
-			if (other.occupation != null)
-				return false;
-		} else if (!occupation.equals(other.occupation))
-			return false;
-		if (zipCode == null) {
-			if (other.zipCode != null)
-				return false;
-		} else if (!zipCode.equals(other.zipCode))
 			return false;
 		return true;
 	}

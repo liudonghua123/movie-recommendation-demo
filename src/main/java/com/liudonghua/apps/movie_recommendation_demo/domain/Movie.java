@@ -26,17 +26,13 @@ public class Movie {
 	private Date releaseDate;
 	private String imdbUrl;
 
-	@RelatedTo(type = "HAS_GENRE")
-	@Fetch
-	Set<Genre> genres = new HashSet<>();
-
 	@RelatedToVia(type = "HAS_GENRE")
 	@Fetch
-	Set<GenreRel> genreRels = new HashSet<>();
+	private Set<GenreRel> genreRels = new HashSet<>();
 
 	@RelatedToVia(type = "RATED", direction = Direction.INCOMING)
 	@Fetch
-	Set<Rating> ratings = new HashSet<>();
+	private Set<Rating> ratings = new HashSet<>();
 
 	public Movie() {
 	}
@@ -94,14 +90,6 @@ public class Movie {
 		this.imdbUrl = imdbUrl;
 	}
 
-	public Set<Genre> getGenres() {
-		return genres;
-	}
-
-	public void setGenres(Set<Genre> genres) {
-		this.genres = genres;
-	}
-
 	public Set<GenreRel> getGenreRels() {
 		return genreRels;
 	}
@@ -123,10 +111,6 @@ public class Movie {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((imdbUrl == null) ? 0 : imdbUrl.hashCode());
-		result = prime * result
-				+ ((releaseDate == null) ? 0 : releaseDate.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
@@ -140,21 +124,6 @@ public class Movie {
 			return false;
 		Movie other = (Movie) obj;
 		if (id != other.id)
-			return false;
-		if (imdbUrl == null) {
-			if (other.imdbUrl != null)
-				return false;
-		} else if (!imdbUrl.equals(other.imdbUrl))
-			return false;
-		if (releaseDate == null) {
-			if (other.releaseDate != null)
-				return false;
-		} else if (!releaseDate.equals(other.releaseDate))
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
 			return false;
 		return true;
 	}

@@ -16,12 +16,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.liudonghua.apps.movie_recommendation_demo.service.MovieService;
 
 @Configuration
-@Import(MyNeo4jConfiguration.class)
+@Import(ApplicationConfiguration.class)
 @RestController("/")
-public class SampleMovieApplication extends WebMvcConfigurerAdapter {
+public class MovieApplication extends WebMvcConfigurerAdapter {
 
 	public static void main(String[] args) throws IOException {
-		SpringApplication.run(SampleMovieApplication.class, args);
+		SpringApplication.run(MovieApplication.class, args);
 	}
 
 	@Autowired

@@ -1,6 +1,5 @@
 
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -27,7 +26,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.neo4j.annotation.QueryResult;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.core.GraphDatabase;
@@ -39,11 +37,11 @@ import com.liudonghua.apps.movie_recommendation_demo.domain.Movie;
 import com.liudonghua.apps.movie_recommendation_demo.domain.Rating;
 import com.liudonghua.apps.movie_recommendation_demo.domain.User;
 import com.liudonghua.apps.movie_recommendation_demo.repository.GenreRepository;
+import com.liudonghua.apps.movie_recommendation_demo.repository.GenreRepository.UserLiking;
 import com.liudonghua.apps.movie_recommendation_demo.repository.MovieRepository;
 import com.liudonghua.apps.movie_recommendation_demo.repository.MovieRepository.EdgeInfo;
 import com.liudonghua.apps.movie_recommendation_demo.repository.MovieRepository.NodeInfo;
 import com.liudonghua.apps.movie_recommendation_demo.repository.UserRepository;
-import com.liudonghua.apps.movie_recommendation_demo.repository.GenreRepository.UserLiking;
 import com.liudonghua.apps.movie_recommendation_demo.repository.UserRepository.UserPair;
 import com.liudonghua.apps.movie_recommendation_demo.utils.Utils;
 
@@ -60,8 +58,8 @@ public class Application extends Neo4jConfiguration implements
 
 	@Bean
 	GraphDatabaseService graphDatabaseService() {
-//		return new GraphDatabaseFactory().newEmbeddedDatabase(databaseName);
-		return new SpringRestGraphDatabase("http://localhost:7474/db/data/");
+		return new GraphDatabaseFactory().newEmbeddedDatabase(databaseName);
+//		return new SpringRestGraphDatabase("http://localhost:7474/db/data/");
 	}
 
 	@Autowired
@@ -80,9 +78,6 @@ public class Application extends Neo4jConfiguration implements
 	@Override
 	public void run(String... arg0) {
 		Transaction tx = graphDatabase.beginTx();
-		//parseDatabase();
-		//Movie movie = movieRepository.findBySchemaPropertyValue("id", 1);
-		//User user = userRepository.findBySchemaPropertyValue("id", 1);
 //		Map<Double, Movie> recommendations = getRecommendations(1);
 		
 		List<NodeInfo> nodes = movieRepository.findAllNodes();

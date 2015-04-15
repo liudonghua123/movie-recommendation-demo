@@ -16,7 +16,8 @@ public interface GenreRepository extends GraphRepository<Genre> {
 			+ "with count(distinct m) as totalMovies,n "
 			+ "match (n)-[:RATED]->(:Movie)-[r:HAS_GENRE]-(g:Genre) "
 			+ "with g.name as genre_name, sum(r.probability)/totalMovies as avg_liking "
-			+ "return genre_name, avg_liking " + "order by avg_liking desc "
+			+ "return genre_name, avg_liking "
+			+ "order by avg_liking desc "
 			+ "limit {1}")
 	List<UserLiking> findUserLikings(int userid, int limit);
 

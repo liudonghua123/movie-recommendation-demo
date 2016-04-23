@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.core.GraphDatabase;
-import org.springframework.data.neo4j.rest.SpringRestGraphDatabase;
 
 import com.liudonghua.apps.movie_recommendation_demo.domain.Genre;
 import com.liudonghua.apps.movie_recommendation_demo.domain.GenreRel;

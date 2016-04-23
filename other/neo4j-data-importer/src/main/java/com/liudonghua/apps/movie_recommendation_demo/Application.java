@@ -53,6 +53,7 @@ import com.liudonghua.apps.movie_recommendation_demo.utils.Utils;
 public class Application extends Neo4jConfiguration implements
 		CommandLineRunner {
 	
+	private static final String RESOURCES_ROOT = "resources/ml-100k-sm";
 	private Log log = LogFactory.getLog(getClass());
 
 	public Application() {
@@ -271,7 +272,7 @@ public class Application extends Neo4jConfiguration implements
 		tx = graphDatabase.beginTx();
 		log.info("Parse genre file start");
 		try (Stream<String> lines = Files.lines(
-				Paths.get("resources/ml-100k", "u.genre"),
+				Paths.get(RESOURCES_ROOT, "u.genre"),
 				Charset.defaultCharset())) {
 			lines.forEach(line -> processGenreEachLine(line));
 		} catch (IOException e) {
@@ -285,7 +286,7 @@ public class Application extends Neo4jConfiguration implements
 		tx = graphDatabase.beginTx();
 		// Parse user file (u.user) to insert User nodes
 		try (Stream<String> lines = Files.lines(
-				Paths.get("resources/ml-100k", "u.user"),
+				Paths.get(RESOURCES_ROOT, "u.user"),
 				Charset.defaultCharset())) {
 			lines.forEach(line -> processUserEachLine(line));
 		} catch (IOException e) {
@@ -299,7 +300,7 @@ public class Application extends Neo4jConfiguration implements
 		tx = graphDatabase.beginTx();
 		// Parse movie file (u.item) to insert Movie nodes and HAS_GENRE relations
 		try (Stream<String> lines = Files.lines(
-				Paths.get("resources/ml-100k", "u.item"),
+				Paths.get(RESOURCES_ROOT, "u.item"),
 				Charset.defaultCharset())) {
 			lines.forEach(line -> processMovieEachLine(line));
 		} catch (IOException e) {
@@ -313,7 +314,7 @@ public class Application extends Neo4jConfiguration implements
 		tx = graphDatabase.beginTx();
 		// Parse user-movie-ratings (u.item) file to insert ratings
 		try (Stream<String> lines = Files.lines(
-				Paths.get("resources/ml-100k", "u.data"),
+				Paths.get(RESOURCES_ROOT, "u.data"),
 				Charset.defaultCharset())) {
 			lines.forEach(line -> processRatingsEachLine(line));
 		} catch (IOException e) {
